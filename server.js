@@ -49,7 +49,8 @@ const QRCode = require('qrcode');
 const QUESTIONS = require('./data/questions');
 
 // ─────────────────────────────────────────────────────────────────── config ──
-const PORT = Number(process.env.PORT) || 3000;
+const portArg = process.argv.indexOf('--port');
+const PORT = Number(portArg > 0 ? process.argv[portArg + 1] : process.env.PORT) || 3000;
 /** Multiplies every phase timer. TIME_SCALE=0.05 makes bot simulations fly. */
 const TIME_SCALE = Number(process.env.TIME_SCALE) > 0 ? Number(process.env.TIME_SCALE) : 1;
 const MIN_PLAYERS = Number(process.env.MIN_PLAYERS) || 2;

@@ -251,7 +251,7 @@ body.cinema .letterbox::after {
 /* ── film-leader countdown ───────────────────────────────────────────────── */
 .leader {
   position: relative;
-  width: min(40vh, 70vw);
+  width: min(40cqh, 70cqw);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
@@ -294,14 +294,14 @@ body.cinema .letterbox::after {
   position: relative;
   z-index: 2;
   font-family: var(--font-display);
-  font-size: min(24vh, 40vw);
+  font-size: min(24cqh, 40cqw);
   line-height: 1;
 }
 .leader__word {
   position: relative;
   z-index: 2;
   font-family: var(--font-display);
-  font-size: min(7vh, 12vw);
+  font-size: min(7cqh, 12cqw);
   color: var(--blood);
 }
 
