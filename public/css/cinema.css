@@ -1,0 +1,492 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Cinema layer (host + controller): everything that makes it feel like a film.
+
+     .sky / .moon / .cloud / .bat / .skyline-wrap / .fog   moonlit haunted haveli
+     .curtains (.is-open)                                   red velvet theatre curtains
+     .letterbox + body.cinema                               2.39:1 black bars for big moments
+     .leader                                                old film-leader countdown
+     .burn (.is-on)                                         film-burn flash between scenes
+     .projector                                             scratches + projector flicker
+     .ticket                                                cinema-ticket answer cards
+     .clapper                                               clapperboard scene header
+     .ic                                                    inline SVG icons (MKM.art.icon)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@property --a {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ── icons ───────────────────────────────────────────────────────────────── */
+.ic {
+  display: inline-grid;
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.2em;
+  flex: none;
+}
+.ic svg {
+  width: 100%;
+  height: 100%;
+}
+.hero-art {
+  display: grid;
+  place-items: center;
+  width: 7.5rem;
+  height: 7.5rem;
+  margin: 0 auto;
+  color: var(--gold);
+  filter: drop-shadow(0 0 18px rgba(255, 159, 28, 0.45));
+}
+.hero-art .ic {
+  width: 100%;
+  height: 100%;
+}
+.hero-art svg.art,
+.hero-art > svg {
+  width: 100%;
+  height: 100%;
+}
+.hero-art--blood {
+  color: var(--blood-bright);
+  filter: drop-shadow(0 0 18px rgba(227, 23, 58, 0.55));
+}
+.hero-art--ghost {
+  color: var(--ghost);
+  filter: drop-shadow(0 0 18px rgba(166, 227, 233, 0.55));
+  animation: ghost-float 3.2s ease-in-out infinite;
+}
+.mini-sprite {
+  display: inline-block;
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: -0.45em;
+}
+.mini-sprite svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── the night sky over Kaali Haveli ─────────────────────────────────────── */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 1.2s;
+}
+.sky.is-dim {
+  opacity: 0.45;
+}
+.moon {
+  position: absolute;
+  top: 6vh;
+  right: 11vw;
+  width: 17vh;
+  height: 17vh;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 62% 58%, rgba(150, 130, 95, 0.55) 0 7%, transparent 8%),
+    radial-gradient(circle at 34% 64%, rgba(150, 130, 95, 0.45) 0 5%, transparent 6%),
+    radial-gradient(circle at 46% 30%, rgba(150, 130, 95, 0.4) 0 4%, transparent 5%),
+    radial-gradient(circle at 38% 35%, #fffbe8 0%, #f7e7c4 45%, #d8c39a 72%, #a8946e 100%);
+  box-shadow: 0 0 60px 18px rgba(247, 231, 196, 0.22), 0 0 180px 70px rgba(244, 201, 93, 0.1);
+}
+.cloud {
+  position: absolute;
+  height: 5vh;
+  border-radius: 999px;
+  background: rgba(36, 12, 53, 0.9);
+  filter: blur(6px);
+  animation: cloud-drift linear infinite;
+}
+.cloud--1 { top: 12vh; width: 34vw; animation-duration: 70s; }
+.cloud--2 { top: 20vh; width: 22vw; animation-duration: 95s; animation-delay: -40s; opacity: 0.8; }
+.cloud--3 { top: 6vh; width: 18vw; animation-duration: 120s; animation-delay: -80s; opacity: 0.6; }
+@keyframes cloud-drift {
+  from { transform: translateX(110vw); }
+  to { transform: translateX(-40vw); }
+}
+.bat {
+  position: absolute;
+  width: 4vh;
+  height: 2vh;
+  color: #07030b;
+  animation: bat-fly linear infinite;
+}
+.bat svg {
+  width: 100%;
+  height: 100%;
+  animation: bat-flap 0.28s ease-in-out infinite alternate;
+  transform-origin: 50% 40%;
+}
+.bat--1 { top: 18vh; animation-duration: 16s; }
+.bat--2 { top: 28vh; animation-duration: 21s; animation-delay: -7s; transform: scale(0.7); }
+.bat--3 { top: 10vh; animation-duration: 26s; animation-delay: -15s; transform: scale(0.55); }
+@keyframes bat-fly {
+  0% { left: -6vw; translate: 0 0; }
+  25% { translate: 0 -4vh; }
+  50% { translate: 0 2vh; }
+  75% { translate: 0 -3vh; }
+  100% { left: 106vw; translate: 0 0; }
+}
+@keyframes bat-flap {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0.35); }
+}
+.skyline-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 36vh;
+}
+.skyline {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.skyline .win--lit {
+  fill: #ffb347;
+  filter: drop-shadow(0 0 6px rgba(255, 159, 28, 0.9));
+  animation: window-flicker 6s infinite;
+}
+@keyframes window-flicker {
+  0%, 100% { opacity: 1; }
+  42% { opacity: 0.85; }
+  44% { opacity: 0.2; }
+  46% { opacity: 0.9; }
+  70% { opacity: 0.7; }
+}
+.fog {
+  position: absolute;
+  left: 0;
+  bottom: -4vh;
+  width: 200%;
+  height: 22vh;
+  background:
+    radial-gradient(40% 60% at 20% 70%, rgba(185, 165, 206, 0.22), transparent 70%),
+    radial-gradient(35% 55% at 55% 80%, rgba(185, 165, 206, 0.18), transparent 70%),
+    radial-gradient(30% 50% at 85% 75%, rgba(185, 165, 206, 0.2), transparent 70%);
+  animation: fog-roll 45s linear infinite;
+  filter: blur(4px);
+}
+.fog--2 {
+  bottom: -8vh;
+  opacity: 0.7;
+  animation-duration: 70s;
+  animation-direction: reverse;
+}
+@keyframes fog-roll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── theatre curtains ────────────────────────────────────────────────────── */
+.curtains {
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  pointer-events: none;
+}
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 51%;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.42) 0, rgba(0, 0, 0, 0) 2.6%, rgba(255, 210, 210, 0.08) 4.4%, rgba(0, 0, 0, 0) 6.2%, rgba(0, 0, 0, 0.42) 8.8%),
+    linear-gradient(180deg, #96102a 0%, #6a0819 55%, #3e040e 100%);
+  box-shadow: inset 0 -1.4vh 0 #d4a017, inset 0 -1.9vh 0 #6a4500;
+  transition: transform 1.6s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.curtain--l {
+  left: 0;
+  box-shadow: inset 0 -1.4vh 0 #d4a017, inset 0 -1.9vh 0 #6a4500, inset -2vw 0 3vw rgba(0, 0, 0, 0.55);
+}
+.curtain--r {
+  right: 0;
+  box-shadow: inset 0 -1.4vh 0 #d4a017, inset 0 -1.9vh 0 #6a4500, inset 2vw 0 3vw rgba(0, 0, 0, 0.55);
+}
+.valance {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 11vh;
+  background:
+    radial-gradient(circle at 50% 0, transparent 0, transparent 0) top / 8vw 100%,
+    linear-gradient(180deg, #7a0a1e, #4a0410);
+  -webkit-mask: radial-gradient(4vw 2.4vh at 50% 100%, #0000 98%, #000) bottom / 8vw 100% repeat-x;
+  mask: radial-gradient(4vw 2.4vh at 50% 100%, #0000 98%, #000) bottom / 8vw 100% repeat-x;
+  border-bottom: 0.6vh solid #d4a017;
+  transition: transform 1.4s cubic-bezier(0.7, 0, 0.2, 1) 0.4s;
+}
+.curtains.is-open .curtain--l { transform: translateX(-102%); }
+.curtains.is-open .curtain--r { transform: translateX(102%); }
+.curtains.is-open .valance { transform: translateY(-110%); }
+
+/* ── letterbox (cinemascope bars) ────────────────────────────────────────── */
+.letterbox::before,
+.letterbox::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 66;
+  height: 0;
+  background: #000;
+  transition: height 0.9s cubic-bezier(0.6, 0, 0.2, 1);
+  pointer-events: none;
+}
+.letterbox::before { top: 0; }
+.letterbox::after { bottom: 0; }
+body.cinema .letterbox::before,
+body.cinema .letterbox::after {
+  height: 6.5vh;
+}
+
+/* ── film-leader countdown ───────────────────────────────────────────────── */
+.leader {
+  position: relative;
+  width: min(40vh, 70vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #120a0a;
+  background: radial-gradient(circle, #efe3c6 0 58%, #cdb990 100%);
+  box-shadow: 0 0 0 1.2vh #120a0a, 0 0 0 1.6vh #efe3c6, 0 0 80px rgba(255, 240, 200, 0.25);
+  filter: sepia(0.45) contrast(1.05);
+  overflow: hidden;
+}
+.leader__sweep {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(rgba(18, 10, 10, 0.5) var(--a), transparent 0);
+  animation: leader-sweep 1s linear infinite;
+}
+@keyframes leader-sweep {
+  from { --a: 0deg; }
+  to { --a: 360deg; }
+}
+.leader__ring {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 0.5vh solid #120a0a;
+}
+.leader__ring + .leader__ring {
+  inset: 22%;
+  border-width: 0.3vh;
+}
+.leader::before,
+.leader::after {
+  content: '';
+  position: absolute;
+  background: #120a0a;
+}
+.leader::before { left: 0; right: 0; top: 50%; height: 0.35vh; }
+.leader::after { top: 0; bottom: 0; left: 50%; width: 0.35vh; }
+.leader__num {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: min(24vh, 40vw);
+  line-height: 1;
+}
+.leader__word {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: min(7vh, 12vw);
+  color: var(--blood);
+}
+
+/* ── film burn between scenes ────────────────────────────────────────────── */
+.burn {
+  position: fixed;
+  inset: -20%;
+  z-index: 64;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: radial-gradient(circle at var(--x, 30%) var(--y, 40%), rgba(255, 250, 225, 0.95) 0%, rgba(255, 175, 60, 0.75) 10%, rgba(200, 45, 20, 0.4) 24%, transparent 46%);
+}
+.burn.is-on {
+  animation: burn 0.85s ease-out;
+}
+@keyframes burn {
+  0% { opacity: 0; transform: scale(0.5); }
+  22% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
+/* ── projector: scratches, dust, flicker ─────────────────────────────────── */
+.projector {
+  position: fixed;
+  inset: 0;
+  z-index: 58;
+  pointer-events: none;
+}
+.projector::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 240, 200, 0.025);
+  animation: projector-flicker 0.14s steps(2) infinite;
+}
+.projector i {
+  position: absolute;
+  top: -5%;
+  width: 1px;
+  height: 110%;
+  background: rgba(255, 245, 220, 0.16);
+  animation: scratch 3.4s steps(1) infinite;
+}
+.projector i:nth-child(2) { animation-duration: 4.7s; animation-delay: -1.3s; width: 2px; background: rgba(0, 0, 0, 0.25); }
+.projector i:nth-child(3) { animation-duration: 6.1s; animation-delay: -3s; }
+.projector b {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 245, 220, 0.35);
+  animation: dust 2.3s steps(1) infinite;
+}
+.projector b:nth-of-type(2) { animation-duration: 3.1s; animation-delay: -1s; background: rgba(0, 0, 0, 0.45); }
+@keyframes projector-flicker {
+  50% { opacity: 0.2; }
+}
+@keyframes scratch {
+  0% { left: 12%; opacity: 0; }
+  9% { left: 38%; opacity: 0.6; }
+  21% { left: 71%; opacity: 0; }
+  34% { left: 64%; opacity: 0.45; }
+  48% { opacity: 0; }
+  61% { left: 22%; opacity: 0.4; }
+  79% { left: 86%; opacity: 0; }
+  88% { left: 47%; opacity: 0.5; }
+}
+@keyframes dust {
+  0% { left: 20%; top: 30%; opacity: 0.8; }
+  12% { opacity: 0; }
+  30% { left: 75%; top: 62%; opacity: 0.7; }
+  42% { opacity: 0; }
+  60% { left: 44%; top: 18%; opacity: 0.9; }
+  72% { opacity: 0; }
+  85% { left: 88%; top: 80%; opacity: 0.6; }
+}
+
+/* ── cinema tickets (answer options) ─────────────────────────────────────── */
+.ticket {
+  --notch: 11px;
+  position: relative;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 50%, #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, #0000 97%, #000) right / 51% 100% no-repeat;
+}
+.ticket__stub {
+  position: relative;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  padding-right: 0.7em;
+  margin-right: 0.2em;
+  border-right: 2px dashed color-mix(in srgb, var(--oc, var(--gold)) 70%, transparent);
+}
+.ticket__admit {
+  position: absolute;
+  bottom: 0.25em;
+  right: 0.9em;
+  font-size: 0.42em;
+  letter-spacing: 0.25em;
+  opacity: 0.45;
+  text-transform: uppercase;
+}
+.stamp {
+  position: absolute;
+  top: 0.35em;
+  right: 0.9em;
+  padding: 0.05em 0.5em;
+  border: 3px solid currentColor;
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.8em;
+  letter-spacing: 0.06em;
+  transform: rotate(-9deg);
+  color: var(--gold);
+  animation: stamp 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  animation-delay: var(--d, 0ms);
+  pointer-events: none;
+}
+.stamp--blood {
+  color: var(--blood-bright);
+}
+@keyframes stamp {
+  from { opacity: 0; transform: rotate(-9deg) scale(2.4); }
+  to { opacity: 1; transform: rotate(-9deg) scale(1); }
+}
+
+/* ── clapperboard header ─────────────────────────────────────────────────── */
+.clapper {
+  position: relative;
+  display: inline-grid;
+  min-width: 15em;
+  font-size: 1em;
+  color: #f7f3e8;
+  text-align: left;
+}
+.clapper__arm {
+  height: 0.9em;
+  border-radius: 0.15em 0.15em 0 0;
+  background: repeating-linear-gradient(-55deg, #111 0 0.9em, #f7f3e8 0.9em 1.8em);
+  transform-origin: 0.3em 100%;
+  box-shadow: 0 2px 0 #000;
+}
+.clapper.is-clapping .clapper__arm {
+  animation: clap 0.9s cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+@keyframes clap {
+  0% { transform: rotate(-24deg); }
+  70% { transform: rotate(-24deg); }
+  86% { transform: rotate(2deg); }
+  100% { transform: rotate(0); }
+}
+.clapper__board {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  margin-top: 2px;
+  border-radius: 0 0 0.2em 0.2em;
+  background: #141015;
+  box-shadow: inset 0 0 0 2px #f7f3e8;
+}
+.clapper__board > div {
+  display: grid;
+  padding: 0.2em 0.7em;
+  border-right: 2px solid #f7f3e8;
+}
+.clapper__board > div:last-child {
+  border-right: 0;
+}
+.clapper__board small {
+  font-size: 0.55em;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}
+.clapper__board b {
+  font-family: 'Permanent Marker', var(--font-body);
+  font-weight: 400;
+  font-size: 1.1em;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projector, .bat, .cloud, .fog { animation: none !important; display: none; }
+  .curtain, .valance { transition-duration: 0.01s; }
+}

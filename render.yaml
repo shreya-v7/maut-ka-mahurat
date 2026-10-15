@@ -1,0 +1,14 @@
+# One-click Render deploy (Blueprint). Free web service: Node + Socket.io (WebSockets work on Render).
+# Free instances sleep after ~15 min with no traffic; the first visit after that takes ~1 minute to wake.
+services:
+  - type: web
+    name: maut-ka-mahurat
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

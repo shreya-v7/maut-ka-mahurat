@@ -1,0 +1,25 @@
+{
+  "name": "maut-ka-mahurat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Maut Ka Mahurat: a Bollywood trivia murder party. Host screen + phone controllers over Socket.io.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "bots": "node tools/bots.js",
+    "simulate": "node tools/bots.js --simulate 4",
+    "voice": "node tools/make-voice.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
+  }
+}

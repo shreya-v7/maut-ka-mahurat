@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <title>Maut Ka Mahurat · Controller</title>
+    <meta name="theme-color" content="#140820" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f4c95d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='9.5' width='18' height='11.5' rx='1.6'/><path d='M3.4 9.2 19.8 4.6l1 3.6L4.4 12.8'/></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&family=Permanent+Marker&family=Rozha+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/theme.css" />
+    <link rel="stylesheet" href="/css/cinema.css" />
+    <link rel="stylesheet" href="/css/player.css" />
+  </head>
+  <body class="player">
+    <div id="skyMount"></div>
+    <div class="candlelight"></div>
+    <div class="player-shell">
+      <header class="hud" id="hud" hidden></header>
+      <main class="stage" id="app"></main>
+    </div>
+    <div class="conn-banner" id="connBanner" hidden>Reconnecting to the studio…</div>
+    <div class="burn" id="burn" aria-hidden="true"></div>
+    <div class="grain"></div>
+    <div class="vignette"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/art.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/audio.js"></script>
+    <script src="/player.js"></script>
+  </body>
+</html>
